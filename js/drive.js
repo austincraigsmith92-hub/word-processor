@@ -4,6 +4,7 @@ export class DriveManager {
         this.clientId = clientId || 'YOUR_CLIENT_ID_HERE.apps.googleusercontent.com';
         this.tokenClient = null;
         this.accessToken = null;
+        this.folderId = null;
         this.fileId = null;
         this.isReady = false;
 
@@ -43,11 +44,51 @@ export class DriveManager {
         }
     }
 
-    async ensureFileExists(fileName = 'EyesClosedDraft.txt') {
+    async getOrCreateFolder(folderName = "Eyes-Closed Writer") {
         if (!this.accessToken) throw new Error("Not authenticated");
 
+        // Search for the folder
         const response = await gapi.client.drive.files.list({
-            q: `name='${fileName}' and trashed=false`,
+            q: `mimeType='application/vnd.google-apps.folder' and name='${folderName}' and trashed=false`,
+            spaces: 'drive',
+            fields: 'files(id, name)'
+        });
+
+        const files = response.result.files;
+        if (files && files.length > 0) {
+            this.folderId = files[0].id;
+            return this.folderId;
+        }
+
+        // Create the folder if it doesn't exist
+        const folderMetadata = {
+            'name': folderName,
+            'mimeType': 'application/vnd.google-apps.folder'
+        };
+        const createRes = await gapi.client.drive.files.create({
+            resource: folderMetadata,
+            fields: 'id'
+        });
+
+        this.folderId = createRes.result.id;
+        return this.folderId;
+    }
+
+    async ensureFileExists(fileName = 'Draft.txt') {
+        if (!this.accessToken) throw new Error("Not authenticated");
+
+        if (!this.folderId) {
+            await this.getOrCreateFolder();
+        }
+
+        // Add today's date to the filename
+        const today = new Date();
+        const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        const fullFileName = `${dateStr} - ${fileName}`;
+
+        // Search inside the specific folder
+        const response = await gapi.client.drive.files.list({
+            q: `name='${fullFileName}' and trashed=false and '${this.folderId}' in parents`,
             spaces: 'drive',
             fields: 'files(id, name)'
         });
@@ -57,8 +98,9 @@ export class DriveManager {
             this.fileId = files[0].id;
         } else {
             const fileMetadata = {
-                'name': fileName,
-                'mimeType': 'text/plain'
+                'name': fullFileName,
+                'mimeType': 'text/plain',
+                'parents': [this.folderId]
             };
             const createRes = await gapi.client.drive.files.create({
                 resource: fileMetadata,
