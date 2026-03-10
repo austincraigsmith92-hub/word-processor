@@ -1,0 +1,219 @@
+:root {
+    --bg-color: #0b001a;
+    --panel-bg: rgba(29, 0, 51, 0.7);
+    --border-color: #5b21b6;
+    --text-primary: #e9d5ff;
+    --text-secondary: #a78bfa;
+    --accent: #c084fc;
+    --accent-hover: #d8b4fe;
+    --danger: #ef4444;
+    --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    overflow: hidden;
+}
+
+#app-container {
+    display: flex;
+    height: 100vh;
+    transition: opacity 0.3s ease;
+}
+
+/* Control Panel */
+#control-panel {
+    width: 300px;
+    background: var(--panel-bg);
+    border-right: 1px solid var(--border-color);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    overflow-y: auto;
+    backdrop-filter: blur(10px);
+}
+
+h1 {
+    font-size: 1.5rem;
+    color: var(--accent);
+    margin: 0 0 0.5rem 0;
+    text-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
+}
+
+#control-panel p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.control-section {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(91, 33, 182, 0.4);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+h2 {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-top: 0;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.setting-row label {
+    font-size: 0.9rem;
+}
+
+select, input[type="range"] {
+    background: #1e003b;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.25rem;
+    cursor: pointer;
+}
+
+/* Editor Panel */
+#editor-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+}
+
+.editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+#editor {
+    flex: 1;
+    background: rgba(0,0,0,0.1);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    resize: none;
+    outline: none;
+    transition: box-shadow 0.3s ease;
+}
+
+#editor:focus {
+    box-shadow: 0 0 15px rgba(192, 132, 252, 0.2);
+    border-color: var(--accent);
+}
+
+/* Buttons */
+.btn {
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn.primary {
+    background: var(--accent);
+    color: #000;
+}
+
+.btn.primary:hover {
+    background: var(--accent-hover);
+    box-shadow: 0 0 15px var(--accent);
+}
+
+.btn.secondary {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+}
+
+.btn.secondary:hover {
+    background: rgba(192, 132, 252, 0.1);
+}
+
+.btn.small {
+    padding: 0.4rem;
+    font-size: 0.8rem;
+}
+
+.btn.danger {
+    background: var(--danger);
+    color: #fff;
+}
+
+.test-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Status Indicator */
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.dot.inactive { background: #6b7280; box-shadow: none; }
+.dot.active { background: #22c55e; box-shadow: 0 0 8px #22c55e; }
+.dot.idle { background: #eab308; box-shadow: 0 0 8px #eab308; }
+
+.small-text {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+}
+
+/* Privacy Mode */
+body.privacy-mode #app-container {
+    opacity: 0;
+    pointer-events: none;
+}
+
+body.privacy-mode {
+    background: #000;
+}
+
+#btn-stop-floating {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: auto;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    border-radius: 30px;
+    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+    z-index: 1000;
+}
+
+.hidden {
+    display: none !important;
+}

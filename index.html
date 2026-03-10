@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eyes-Closed Word Processor</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.webmanifest">
+</head>
+
+<body>
+    <div id="app-container">
+        <!-- Control Panel -->
+        <aside id="control-panel">
+            <h1>Eyes-Closed WP</h1>
+            <p>Type without watching the screen.</p>
+
+            <section class="control-section">
+                <h2>Monitoring</h2>
+                <button id="btn-start" class="btn primary">Start Monitoring</button>
+                <div class="status-indicator">
+                    <span id="status-dot" class="dot inactive"></span>
+                    <span id="status-text">Inactive</span>
+                </div>
+            </section>
+
+            <section class="control-section">
+                <h2>Settings</h2>
+                <div class="setting-row">
+                    <label>Audio Strategy</label>
+                    <select id="select-audio-mode">
+                        <option value="noise">Noise Only (Original)</option>
+                        <option value="both" selected>Both (Noise + Tones)</option>
+                        <option value="tones">Tones Only</option>
+                    </select>
+                </div>
+                <div class="setting-row">
+                    <label>Noise Mode</label>
+                    <select id="select-noise-mode">
+                        <option value="pink-brown">Pink -> Loud Brown</option>
+                        <option value="pink-deep">Pink -> Deeper Brown (Lowest)</option>
+                        <option value="brown-deep">Medium Brown -> Deeper Brown</option>
+                    </select>
+                </div>
+                <div class="setting-row">
+                    <label>Active Tone</label>
+                    <select id="select-active-tone">
+                        <option value="harp">Light Harp</option>
+                        <option value="piano">Soft Piano</option>
+                        <option value="woodblock">Woodblock</option>
+                        <option value="marimba">Marimba</option>
+                        <option value="guitar">Guitar Pluck</option>
+                        <option value="bell">Bell Chime</option>
+                        <option value="synth">Synthy Blip</option>
+                        <option value="water">Water Drop</option>
+                        <option value="typewriter">Typewriter Click</option>
+                        <option value="shaker">Soft Shaker</option>
+                    </select>
+                </div>
+                <div class="setting-row">
+                    <label>Idle Tone</label>
+                    <select id="select-idle-tone">
+                        <option value="thunder">Low Thunder</option>
+                        <option value="wind">Wind Howl</option>
+                        <option value="pad">Deep Pad</option>
+                        <option value="ocean">Ocean Wave</option>
+                        <option value="gong">Distant Gong</option>
+                        <option value="bass">Soft Bass Pluck</option>
+                        <option value="riser">Subtle Riser</option>
+                        <option value="drone">Heavy Drone</option>
+                        <option value="didge">Didgeridoo</option>
+                        <option value="thud">Bass Drum Thud</option>
+                    </select>
+                </div>
+                <div class="setting-row">
+                    <label>Volume</label>
+                    <input type="range" id="vol-slider" min="0" max="1" step="0.1" value="0.5">
+                </div>
+            </section>
+
+            <section class="control-section">
+                <h2>Drive Backup</h2>
+                <button id="btn-auth" class="btn secondary">Authorize Google Drive</button>
+                <div id="drive-status" class="small-text">Not Connected</div>
+            </section>
+
+            <section class="control-section">
+                <h2>Test Alerts</h2>
+                <div class="test-buttons">
+                    <button id="btn-test-active" class="btn small">Active</button>
+                    <button id="btn-test-idle" class="btn small">Idle</button>
+                    <button id="btn-test-error" class="btn small">Error</button>
+                </div>
+            </section>
+        </aside>
+
+        <!-- Editor Panel -->
+        <main id="editor-panel">
+            <header class="editor-header">
+                <button id="btn-privacy" class="btn secondary">Enter Privacy Mode</button>
+                <span id="word-count">0 words</span>
+            </header>
+            <textarea id="editor" placeholder="Start typing here..."></textarea>
+        </main>
+    </div>
+
+    <!-- Floating Stop Button for Privacy Mode -->
+    <button id="btn-stop-floating" class="btn danger hidden">Stop Processing</button>
+
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://apis.google.com/js/api.js" async defer></script>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+
+</html>

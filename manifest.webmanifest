@@ -1,0 +1,17 @@
+{
+  "name": "Eyes-Closed Word Processor",
+  "short_name": "EyesClosedWP",
+  "description": "A privacy-focused word processor with typing heartbeat and Google Drive backup.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0b001a",
+  "theme_color": "#c084fc",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iI2MwODRmYyIvPjwvc3ZnPg==",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
