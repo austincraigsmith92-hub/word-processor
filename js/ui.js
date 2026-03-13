@@ -31,7 +31,12 @@ export class UI {
 
     setupEventListeners() {
         this.btnPrivacy.addEventListener('click', () => this.togglePrivacyMode(true));
-        this.btnStopFloating.addEventListener('click', () => this.togglePrivacyMode(false));
+        const handleStop = (e) => {
+            e.preventDefault();
+            this.togglePrivacyMode(false);
+        };
+        this.btnStopFloating.addEventListener('click', handleStop);
+        this.btnStopFloating.addEventListener('touchstart', handleStop, {passive: false});
 
         this.editor.addEventListener('input', () => this.updateWordCount());
     }
