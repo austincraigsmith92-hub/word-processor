@@ -118,31 +118,14 @@ export class DriveManager {
                 await this.ensureFileExists();
             }
 
-            const boundary = '-------314159265358979323846';
-            const delimiter = "\\r\\n--" + boundary + "\\r\\n";
-            const close_delim = "\\r\\n--" + boundary + "--";
-
-            const metadata = {
-                'mimeType': 'text/plain'
-            };
-
-            const multipartRequestBody =
-                delimiter +
-                'Content-Type: application/json\\r\\n\\r\\n' +
-                JSON.stringify(metadata) +
-                delimiter +
-                'Content-Type: text/plain\\r\\n\\r\\n' +
-                text +
-                close_delim;
-
             const request = gapi.client.request({
                 'path': `/upload/drive/v3/files/${this.fileId}`,
                 'method': 'PATCH',
-                'params': { 'uploadType': 'multipart' },
+                'params': { 'uploadType': 'media' },
                 'headers': {
-                    'Content-Type': 'multipart/related; boundary="' + boundary + '"'
+                    'Content-Type': 'text/plain'
                 },
-                'body': multipartRequestBody
+                'body': text || ' '
             });
 
             await request;

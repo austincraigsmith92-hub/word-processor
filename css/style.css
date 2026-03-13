@@ -220,6 +220,9 @@ body.privacy-mode {
 
 /* Mobile Responsive Adjustments */
 @media (max-width: 768px) {
+    body, html {
+        overflow: auto;
+    }
     #app-container {
         flex-direction: column;
         height: auto;

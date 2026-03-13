@@ -157,4 +157,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 .catch(err => console.error('SW registration failed', err));
         });
     }
+
+    // Auto-save to Drive loop (30 seconds)
+    let lastSavedText = storage.loadText();
+    setInterval(() => {
+        const currentText = ui.editor.value;
+        if (currentText !== lastSavedText && currentText.trim().length > 0) {
+            drive.saveDraft(currentText).then(success => {
+                if (success) {
+                    lastSavedText = currentText;
+                    audio.playChime(); // Short pleasant melody for versions
+                    console.log('Autosaved to Drive.');
+                }
+            });
+        }
+    }, 30000);
 });
