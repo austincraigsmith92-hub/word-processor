@@ -1,7 +1,7 @@
 export class DriveManager {
     constructor(clientId) {
         // You'll need an active Client ID here
-        this.clientId = clientId || 'YOUR_CLIENT_ID_HERE.apps.googleusercontent.com';
+        this.clientId = clientId || '370099282335-e84qqo6m1pransumqtpuh344s0gcdp9t.apps.googleusercontent.com';
         this.tokenClient = null;
         this.accessToken = null;
         this.folderId = null;
