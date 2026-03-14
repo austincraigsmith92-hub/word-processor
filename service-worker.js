@@ -1,4 +1,4 @@
-const CACHE_NAME = 'eyes-closed-wp-v7';
+const CACHE_NAME = 'eyes-closed-wp-v8';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',

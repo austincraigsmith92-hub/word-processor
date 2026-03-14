@@ -19,6 +19,8 @@ export class UI {
         this.selectNoiseMode = document.getElementById('select-noise-mode');
         this.selectActiveTone = document.getElementById('select-active-tone');
         this.selectIdleTone = document.getElementById('select-idle-tone');
+        this.selectAutosaveInterval = document.getElementById('select-autosave-interval');
+        this.selectAutosaveChime = document.getElementById('select-autosave-chime');
         this.volSlider = document.getElementById('vol-slider');
 
         // Test Buttons

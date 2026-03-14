@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (settings.noiseMode) ui.selectNoiseMode.value = settings.noiseMode;
     if (settings.activeTone) ui.selectActiveTone.value = settings.activeTone;
     if (settings.idleTone) ui.selectIdleTone.value = settings.idleTone;
+    if (settings.autosaveInterval) ui.selectAutosaveInterval.value = settings.autosaveInterval;
+    if (settings.autosaveChime) ui.selectAutosaveChime.value = settings.autosaveChime;
 
     audio.setVolume(ui.volSlider.value);
 
@@ -112,11 +114,13 @@ document.addEventListener('DOMContentLoaded', () => {
             audioMode: ui.selectAudioMode.value,
             noiseMode: ui.selectNoiseMode.value,
             activeTone: ui.selectActiveTone.value,
-            idleTone: ui.selectIdleTone.value
+            idleTone: ui.selectIdleTone.value,
+            autosaveInterval: ui.selectAutosaveInterval.value,
+            autosaveChime: ui.selectAutosaveChime.value
         });
     });
 
-    [ui.selectAudioMode, ui.selectNoiseMode, ui.selectActiveTone, ui.selectIdleTone].forEach(el => {
+    [ui.selectAudioMode, ui.selectNoiseMode, ui.selectActiveTone, ui.selectIdleTone, ui.selectAutosaveInterval, ui.selectAutosaveChime].forEach(el => {
         el.addEventListener('change', () => {
             if (ui.selectAudioMode.value === 'tones') {
                 audio.stopNoise();
@@ -126,7 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 audioMode: ui.selectAudioMode.value,
                 noiseMode: ui.selectNoiseMode.value,
                 activeTone: ui.selectActiveTone.value,
-                idleTone: ui.selectIdleTone.value
+                idleTone: ui.selectIdleTone.value,
+                autosaveInterval: ui.selectAutosaveInterval.value,
+                autosaveChime: ui.selectAutosaveChime.value
             });
         });
     });
@@ -158,18 +164,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Auto-save to Drive loop (30 seconds)
+    // Auto-save to Drive loop (configurable interval)
     let lastSavedText = storage.loadText();
+    let lastSaveTime = Date.now();
+    
     setInterval(() => {
-        const currentText = ui.editor.value;
-        if (currentText !== lastSavedText && currentText.trim().length > 0) {
-            drive.saveDraft(currentText).then(success => {
-                if (success) {
-                    lastSavedText = currentText;
-                    audio.playChime(); // Short pleasant melody for versions
-                    console.log('Autosaved to Drive.');
-                }
-            });
+        const intervalMs = parseInt(ui.selectAutosaveInterval.value, 10);
+        if (Date.now() - lastSaveTime >= intervalMs) {
+            const currentText = ui.editor.value;
+            if (currentText !== lastSavedText && currentText.trim().length > 0) {
+                drive.saveDraft(currentText).then(success => {
+                    if (success) {
+                        lastSavedText = currentText;
+                        lastSaveTime = Date.now();
+                        if (ui.selectAutosaveChime.value === 'on') {
+                            audio.playChime(); 
+                        }
+                        console.log('Autosaved to Drive.');
+                    }
+                });
+            } else {
+                lastSaveTime = Date.now();
+            }
         }
-    }, 30000);
+    }, 5000); // Check every 5 seconds
 });

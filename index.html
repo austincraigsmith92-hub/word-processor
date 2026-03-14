@@ -77,6 +77,23 @@
                     <label>Volume</label>
                     <input type="range" id="vol-slider" min="0" max="1" step="0.1" value="0.5">
                 </div>
+                <div class="setting-row">
+                    <label>Auto-Save</label>
+                    <select id="select-autosave-interval">
+                        <option value="15000">15 Seconds</option>
+                        <option value="30000" selected>30 Seconds</option>
+                        <option value="60000">1 Minute</option>
+                        <option value="120000">2 Minutes</option>
+                        <option value="300000">5 Minutes</option>
+                    </select>
+                </div>
+                <div class="setting-row">
+                    <label>Save Chime</label>
+                    <select id="select-autosave-chime">
+                        <option value="on" selected>On</option>
+                        <option value="off">Off</option>
+                    </select>
+                </div>
             </section>
 
             <section class="control-section">
