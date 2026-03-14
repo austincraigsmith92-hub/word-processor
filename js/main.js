@@ -171,15 +171,18 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(() => {
         const intervalMs = parseInt(ui.selectAutosaveInterval.value, 10);
         if (Date.now() - lastSaveTime >= intervalMs) {
+            // 1. Play chime if enabled at the exact interval
+            if (ui.selectAutosaveChime.value === 'on') {
+                audio.playChime(); 
+            }
+
+            // 2. Only push to Drive if text changed
             const currentText = ui.editor.value;
             if (currentText !== lastSavedText && currentText.trim().length > 0) {
                 drive.saveDraft(currentText).then(success => {
                     if (success) {
                         lastSavedText = currentText;
                         lastSaveTime = Date.now();
-                        if (ui.selectAutosaveChime.value === 'on') {
-                            audio.playChime(); 
-                        }
                         console.log('Autosaved to Drive.');
                     }
                 });
