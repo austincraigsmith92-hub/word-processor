@@ -2,6 +2,7 @@ export class StorageManager {
     constructor() {
         this.STORAGE_KEY = 'eyes_closed_wp_draft';
         this.SETTINGS_KEY = 'eyes_closed_wp_settings';
+        this.DRIVE_AUTH_KEY = 'eyes_closed_wp_drive_authed';
     }
 
     saveText(text) {
@@ -23,5 +24,13 @@ export class StorageManager {
         } catch (e) {
             return {};
         }
+    }
+
+    saveDriveAuthorized() {
+        localStorage.setItem(this.DRIVE_AUTH_KEY, '1');
+    }
+
+    wasDriveAuthorized() {
+        return localStorage.getItem(this.DRIVE_AUTH_KEY) === '1';
     }
 }

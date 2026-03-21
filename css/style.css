@@ -192,6 +192,12 @@ select, input[type="range"] {
     margin-top: 0.5rem;
 }
 
+/* Hidden Text Mode */
+#editor.text-hidden {
+    color: transparent;
+    caret-color: var(--text-primary);
+}
+
 /* Privacy Mode */
 body.privacy-mode #app-container {
     opacity: 0;

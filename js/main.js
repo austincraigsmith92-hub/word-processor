@@ -35,32 +35,33 @@ document.addEventListener('DOMContentLoaded', () => {
             storage.saveText(text);
             drive.saveDraft(text);
 
-            const noiseMode = ui.selectNoiseMode.value || 'pink-brown';
-            const activeNoise = noiseMode.split('-')[0]; // 'pink' or 'brown'
-
             const mode = ui.selectAudioMode.value;
-            if (mode === 'noise' || mode === 'both') {
-                audio.startNoise(activeNoise);
-            }
-            if (mode === 'tones' || mode === 'both') {
-                audio.playActive(ui.selectActiveTone.value);
+            if (mode !== 'silent') {
+                const noiseMode = ui.selectNoiseMode.value || 'pink-brown';
+                const activeNoise = noiseMode.split('-')[0]; // 'pink' or 'brown'
+                if (mode === 'noise' || mode === 'both') {
+                    audio.startNoise(activeNoise);
+                }
+                if (mode === 'tones' || mode === 'both') {
+                    audio.playActive(ui.selectActiveTone.value);
+                }
             }
             console.log(msg);
         },
         onIdle: (msg) => {
             ui.setStatus('idle');
 
-            const noiseMode = ui.selectNoiseMode.value || 'pink-brown';
-            const parts = noiseMode.split('-');
-            const idleNoise = parts.length > 1 ? parts[1] : parts[0];
-            // e.g. 'brown' or 'deep'
-
             const mode = ui.selectAudioMode.value;
-            if (mode === 'noise' || mode === 'both') {
-                audio.startNoise(idleNoise);
-            }
-            if (mode === 'tones' || mode === 'both') {
-                audio.playIdle(ui.selectIdleTone.value);
+            if (mode !== 'silent') {
+                const noiseMode = ui.selectNoiseMode.value || 'pink-brown';
+                const parts = noiseMode.split('-');
+                const idleNoise = parts.length > 1 ? parts[1] : parts[0];
+                if (mode === 'noise' || mode === 'both') {
+                    audio.startNoise(idleNoise);
+                }
+                if (mode === 'tones' || mode === 'both') {
+                    audio.playIdle(ui.selectIdleTone.value);
+                }
             }
             console.log(msg);
         },
@@ -85,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ui.btnStart.classList.remove('danger');
             ui.btnStart.classList.add('primary');
             ui.setStatus('inactive');
+            ui.setTextVisible(false);
         }
     });
 
@@ -99,6 +101,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (success) {
                     audio.playChime();
                     ui.setStatus('active');
+                }
+            });
+        }
+
+        if (text.endsWith('fff')) {
+            text = text.slice(0, -3);
+            ui.editor.value = text;
+            ui.updateWordCount();
+
+            drive.saveDraft(text).then((success) => {
+                if (success) {
+                    audio.playChime();
+                } else {
+                    audio.playError();
                 }
             });
         }
@@ -142,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ui.btnTestError.addEventListener('click', () => audio.playError());
 
     // Drive events
-    ui.btnAuth.addEventListener('click', () => drive.authorize());
+    ui.btnAuth.addEventListener('click', () => drive.authorize(false));
 
     // Allow gapi to init
     setTimeout(() => {
@@ -151,8 +167,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 const driveStatus = document.getElementById('drive-status');
                 driveStatus.textContent = 'Connected & Authenticated';
                 driveStatus.style.color = '#22c55e';
+                storage.saveDriveAuthorized();
             }
         });
+
+        // Auto-authorize silently if user has connected before
+        if (storage.wasDriveAuthorized()) {
+            drive.authorize(true);
+        }
     }, 1000); // Give CDN scripts a moment if loading async
 
     // Register Service Worker for PWA
@@ -171,9 +193,9 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(() => {
         const intervalMs = parseInt(ui.selectAutosaveInterval.value, 10);
         if (Date.now() - lastSaveTime >= intervalMs) {
-            // 1. Play chime if enabled at the exact interval
-            if (ui.selectAutosaveChime.value === 'on') {
-                audio.playChime(); 
+            // 1. Play chime if enabled at the exact interval (not in silent mode)
+            if (ui.selectAutosaveChime.value === 'on' && ui.selectAudioMode.value !== 'silent') {
+                audio.playChime();
             }
 
             // 2. Only push to Drive if text changed

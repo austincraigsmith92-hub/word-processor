@@ -38,9 +38,9 @@ export class DriveManager {
         });
     }
 
-    authorize() {
+    authorize(silent = false) {
         if (this.tokenClient) {
-            this.tokenClient.requestAccessToken({ prompt: 'consent' });
+            this.tokenClient.requestAccessToken({ prompt: silent ? '' : 'consent' });
         }
     }
 

@@ -28,6 +28,10 @@ export class UI {
         this.btnTestIdle = document.getElementById('btn-test-idle');
         this.btnTestError = document.getElementById('btn-test-error');
 
+        // Text visibility
+        this.btnToggleText = document.getElementById('btn-toggle-text');
+        this.textVisible = true;
+
         this.setupEventListeners();
     }
 
@@ -41,6 +45,7 @@ export class UI {
         this.btnStopFloating.addEventListener('touchstart', handleStop, {passive: false});
 
         this.editor.addEventListener('input', () => this.updateWordCount());
+        this.btnToggleText.addEventListener('click', () => this.setTextVisible(!this.textVisible));
     }
 
     togglePrivacyMode(enable) {
@@ -51,7 +56,14 @@ export class UI {
         } else {
             document.body.classList.remove('privacy-mode');
             this.btnStopFloating.classList.add('hidden');
+            // Keep text hidden when exiting privacy mode
         }
+    }
+
+    setTextVisible(visible) {
+        this.textVisible = visible;
+        this.editor.classList.toggle('text-hidden', !visible);
+        this.btnToggleText.textContent = visible ? 'Hide Text' : 'Show Text';
     }
 
     updateWordCount() {
